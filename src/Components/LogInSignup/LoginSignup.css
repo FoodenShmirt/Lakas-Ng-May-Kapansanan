@@ -29,12 +29,16 @@ h2{
     height: auto;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="email"] {
     width: 92%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+input:invalid {
+  border-color: red;
 }
 
 button{
@@ -75,23 +79,27 @@ button{
     cursor: pointer; 
 }
 .submit_container_sgn{
-    display: block;
-    justify-content: center;
-    width: 100%;
-    margin: 0;
-}
-.submit_sgn{
     display: flex;
     justify-content: center;
-    align-items: center;
-    width: 150px;
-    height: 50px;
+    margin-top: 20px;
+}
+.submit_sgn{
+    padding: 10px 20px;
     color: #fff;
     background: #007bff;
     border-radius: 50px;
     font-size: 16px;
     cursor: pointer;  
+    text-align: center;
+    user-select: none;
+    transition: background 0.2s;
 }
+
+
+.submit_sgn:hover {
+  background-color: #0056b3;
+}
+
 .gray{
     background: #eaeaea;
     color: #676767;

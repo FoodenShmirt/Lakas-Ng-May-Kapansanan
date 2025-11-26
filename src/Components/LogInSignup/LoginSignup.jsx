@@ -1,105 +1,130 @@
-import React, { act, useEffect, useState, useNavigate } from 'react'
+import React, { act, useEffect, useState} from 'react'
+import { useNavigate } from "react-router-dom";
 import './LoginSignup.css'
 import { DashBoard } from '../Dashboard/DashBoard';
 import Image from '../Assets/logo.png';
 
-
 export const LoginSignup = () => {
 
   const [pageTitle, setPageTitle] = useState("Log In");
-
-  useEffect(()=>{
-    document.title = pageTitle;
-  },[pageTitle]);
-
   const [action, setAction] = useState("LOG IN");
 
-  /* function LogIn_Acc({}){
-    const [user, setUser] = useState("");
-    const [pw, setPw] = useState("");
-    const navigate = useNavigate();
+  useEffect(() => {
+    document.title = pageTitle;
+  }, [pageTitle]);
 
-    const handleLogin = () =>{
-      if (user === "admin" && pw === "admin"){
-        setIsLoggedIn*(true);
-        navigate();
-      } else {
-        alert("Incorrect Username or Password!");
-      };
+  // LOGIN STATES (must be at top level!)
+  const [username, setUsername] = useState("");
+  const [pw, setPassword] = useState("");
+
+  // NAVIGATE
+  const navigate = useNavigate();
+
+  // LOGIN FUNCTION
+  const handleLogIn = () => {
+    if (username === "admin" && pw === "admin") {
+      navigate("/dashboard");
+    } else {
+      alert("The password or username you've entered is incorrect.");
     }
-  }*/
+  };
 
-  return (      
+  return (
     <>
-    <div className="bg_logo">
-      <img src={Image} alt=""></img>
-    </div>
-    
-    <div className="container">
+      <div className="bg_logo">
+        <img src={Image} alt="" />
+      </div>
+
+      <div className="container">
         <div className="header">
-         <div className="text"><h2>{action}</h2></div> 
+          <div className="text"><h2>{action}</h2></div>
         </div>
 
         <div className="inputs">
-            {action==="SIGN UP"?<div></div>: 
+          {action === "SIGN UP" ? null :
             <div className="input">
-            <input type="text" name="username" placeholder='Username'/>
-            </div>
-          }
-            {action==="SIGN UP"?<div></div>: 
-            <div className="input">
-            <input type="password" name="password" placeholder='Password'/>
-            </div>
-          }
-          {action==="LOG IN"?<div></div>: 
-            <div className="input">
-            <input type="text" name="First Name" placeholder='First Name' />
-            </div>
-          }
-          {action==="LOG IN"?<div></div>:    
-            <div className="input">
-            <input type="password" name="Middle Name" placeholder='Middle Name' />
-            </div>
-          }
-          {action==="LOG IN"?<div></div>:    
-            <div className="input">
-            <input type="text" name="Last Name" placeholder='Last Name' />
-            </div>
-          }
-          {action==="LOG IN"?<div></div>:    
-            <div className="input">
-            <input type="password" name="Email Address" placeholder='Email Address' />
-            </div>
-          }
-          {action==="LOG IN"?<div></div>:    
-            <div className="input">
-            <input type="password" name="Contact Number" placeholder='Contact Number' />
+              <input 
+                type="text" 
+                placeholder='Username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </div>
           }
 
-          {action==="SIGN UP"?<div></div>:
-          <div className="submit-container">
-            <div className={action==="LOG IN"?"submit gray":"submit"} onClick={()=>{setAction("SIGN UP");setPageTitle("Sign Up");}}>Sign Up</div>
-            <div className={action==="SIGN UP"?"submit gray":"submit"} onClick={()=>{setAction("LOG IN"); }}>Log In</div>
-          </div>
+          {action === "SIGN UP" ? null :
+            <div className="input">
+              <input 
+                type="password" 
+                placeholder='Password'
+                value={pw}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
           }
-          {action==="LOG IN"?<div></div>:
-          <div className="submitcontainer_sgn">
-            <div className={action==="LOG IN"?"submit_sgn gray":"submit_sgn"} onClick={()=>{setAction("SIGN UP")}}>Sign Up</div>
-          </div>
+
+          {/* SIGN UP FIELDS */}
+          {action === "LOG IN" ? null :
+            <>
+              <div className="input"><input type="text" placeholder='First Name' /></div>
+              <div className="input"><input type="text" placeholder='Middle Name' /></div>
+              <div className="input"><input type="text" placeholder='Last Name' /></div>
+              <div className="input"><input type="email" placeholder='Email Address' /></div>
+              <div className="input"><input type="text" placeholder='Contact Number' maxLength={11} /></div>
+            </>
           }
-          {action==="SIGN UP"?<div></div>:
+
+          {/* BUTTONS */}
+          {action === "SIGN UP" ? null :
+            <div className="submit-container">
+              <div 
+                className={action === "LOG IN" ? "submit gray" : "submit"} 
+                onClick={() => { setAction("SIGN UP"); setPageTitle("Sign Up"); }}
+              >
+                Sign Up
+              </div>
+
+              <div 
+                className={action === "SIGN UP" ? "submit gray" : "submit"} 
+                onClick={() => { handleLogIn(); }}
+              >
+                Log In
+              </div>
+            </div>
+          }
+
+          {/* SIGN UP ONLY BUTTON */}
+          {action === "LOG IN" ? null :
+            <div className="submitcontainer_sgn">
+              <div 
+                className="submit_sgn" 
+                onClick={() => { setAction("SIGN UP") }}>
+                Sign Up
+              </div>
+            </div>
+          }
+
+          {/* FORGOT PASSWORD */}
+          {action === "SIGN UP" ? null :
             <div className="forgotPw">
-            <button type="button" class="forgotPw-btn">Forgot Password?</button>
-          </div>
+              <button type="button" className="forgotPw-btn">Forgot Password?</button>
+            </div>
           }
-          {action==="LOG IN"?<div></div>:
+
+          {/* ALREADY HAVE ACCOUNT */}
+          {action === "LOG IN" ? null :
             <div className="forgotPw">
-            <button type="button" class="forgotPw-btn" onClick={()=>{setAction("LOG IN");setPageTitle("Log In");}}>Already have an account?</button>
-          </div>
+              <button 
+                type="button" 
+                className="forgotPw-btn" 
+                onClick={() => { setAction("LOG IN"); setPageTitle("Log In"); }}>
+                Already have an account?
+              </button>
+            </div>
           }
+          
         </div>
       </div>
-      </>
-  )
-}
+    </>
+  );
+};
