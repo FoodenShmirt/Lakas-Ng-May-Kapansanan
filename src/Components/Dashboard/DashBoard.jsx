@@ -26,7 +26,6 @@ function FlyToLocation({ position }) {
 
 function DashBoard() {
   const [position, setPosition] = useState(null);
-  const [accuracy, setAccuracy] = useState(0);
 
   useEffect(() => {
     if (!("geolocation" in navigator)) {
@@ -37,8 +36,7 @@ function DashBoard() {
     // Getting location
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
-        setPosition([pos.coords.latitude, pos.coords.longitude]);
-        setAccuracy(pos.coords.accuracy);
+        setPosition([pos.coords.latitude, pos.coords.longitude]); 
       },
       (err) => {
         console.error("Geolocation error:", err);
