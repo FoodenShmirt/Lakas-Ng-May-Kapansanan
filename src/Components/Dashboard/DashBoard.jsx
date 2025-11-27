@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import "./DashBoard.css"; // Import the CSS file
 
 // Fix Leaflet default icon paths
 delete L.Icon.Default.prototype._getIconUrl;
@@ -33,6 +34,7 @@ function DashBoard() {
       return;
     }
 
+    // Getting location
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
         setPosition([pos.coords.latitude, pos.coords.longitude]);
@@ -57,32 +59,30 @@ function DashBoard() {
   }, []);
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial" }}>
-      <h1>Map User Location</h1>
-      <MapContainer
-        center={[0, 0]}
-        zoom={2}
-        style={{
-          height: "50vh",
-          width: "100vw",
-          maxWidth: "800px",
-          borderRadius: "10px",
-          overflow: "hidden",
-        }}
-      >
-        <TileLayer
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        />
-        {position && (
-          <>
-            <Marker position={position} />
-            <Circle center={position} radius={accuracy} />
-            <FlyToLocation position={position} />
-          </>
-        )}
-      </MapContainer>
-    </div>
+    // Main container for the dashboard
+<>
+  <div className="map-title">
+    <h1>Map User Location</h1>
+  </div>
+
+  <div className="dashboard-container">
+    <MapContainer
+      center={[14.7699169, 121.0784688]}
+      zoom={16}
+      className="map-container"
+    >
+      <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+      {position && (
+        <>
+          <Marker position={position} />
+          <Circle center={position} radius={450} />
+          <FlyToLocation position={position} />
+        </>
+      )}
+    </MapContainer>
+  </div>
+</>
   );
 }
 

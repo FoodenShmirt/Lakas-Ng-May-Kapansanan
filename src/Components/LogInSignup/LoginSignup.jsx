@@ -12,27 +12,22 @@ export const LoginSignup = () => {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  // LOGIN STATES (must be at top level!)
+  // MUST BE ON TOP //
   const [username, setUsername] = useState("");
   const [pw, setPassword] = useState("");
 
-  // NAVIGATE
   const navigate = useNavigate();
 
-  // LOGIN FUNCTION
-const handleLogIn = (e) => {
-  e.preventDefault(); // prevent form refresh, only needed if inside a form
+  const handleLogIn = (e) => {
+    e.preventDefault(); 
 
   if (username === "admin" && pw === "admin") {
-    // set login flag
     localStorage.setItem("loggedIn", "true");
-
-    // navigate to dashboard
     navigate("/dashboard");
   } else {
-    alert("The password or username you've entered is incorrect.");
-  }
-};
+      alert("The password or username you've entered is incorrect.");
+    }
+  };
 
   return (
     <>

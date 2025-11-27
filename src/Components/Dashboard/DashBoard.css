@@ -1,0 +1,37 @@
+html, body {
+  margin-top: auto;
+  padding: 0;
+  overflow: hidden; /* prevents any scrolling */
+  height: 100%;
+  width: 100%;
+}
+.map-title {
+  width: 100%;
+  text-align: center;
+  padding: 15px 0;  /* smaller so height is predictable */
+  background: #2ba8d9;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+/* Title height = 60px (approx) */
+.dashboard-container {
+  height: calc(100vh - 60px);
+  width: 100vw;
+  overflow: hidden; /* prevents map overflow */
+}
+
+/* Map must not overflow container */
+.map-container {
+  height: 50vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Fix Leaflet control overflow */
+.leaflet-control-container {
+  box-sizing: border-box;
+}
