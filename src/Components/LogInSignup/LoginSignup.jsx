@@ -20,13 +20,19 @@ export const LoginSignup = () => {
   const navigate = useNavigate();
 
   // LOGIN FUNCTION
-  const handleLogIn = () => {
-    if (username === "admin" && pw === "admin") {
-      navigate("/dashboard");
-    } else {
-      alert("The password or username you've entered is incorrect.");
-    }
-  };
+const handleLogIn = (e) => {
+  e.preventDefault(); // prevent form refresh, only needed if inside a form
+
+  if (username === "admin" && pw === "admin") {
+    // set login flag
+    localStorage.setItem("loggedIn", "true");
+
+    // navigate to dashboard
+    navigate("/dashboard");
+  } else {
+    alert("The password or username you've entered is incorrect.");
+  }
+};
 
   return (
     <>
@@ -74,32 +80,34 @@ export const LoginSignup = () => {
           }
 
           {/* BUTTONS */}
-          {action === "SIGN UP" ? null :
-            <div className="submit-container">
-              <div 
-                className={action === "LOG IN" ? "submit gray" : "submit"} 
-                onClick={() => { setAction("SIGN UP"); setPageTitle("Sign Up"); }}
-              >
-                Sign Up
-              </div>
+          {action === "SIGN UP" ? null : (
+          <div className="submit-container">
 
-              <div 
-                className={action === "SIGN UP" ? "submit gray" : "submit"} 
-                onClick={() => { handleLogIn(); }}
-              >
-                Log In
-              </div>
-            </div>
-          }
+            <button
+              className={action === "LOG IN" ? "submit signup" : "submit signup gray"}
+              onClick={() => { 
+                setAction("SIGN UP"); 
+                setPageTitle("Sign Up"); }}>
+              Sign Up
+            </button>
+
+            <button
+              className={action === "SIGN UP" ? "submit login gray" : "submit login"}
+              onClick={handleLogIn} >
+              Log In
+            </button>
+          </div>
+        )}
+
 
           {/* SIGN UP ONLY BUTTON */}
           {action === "LOG IN" ? null :
             <div className="submitcontainer_sgn">
-              <div 
+              <button
                 className="submit_sgn" 
                 onClick={() => { setAction("SIGN UP") }}>
                 Sign Up
-              </div>
+              </button>
             </div>
           }
 
