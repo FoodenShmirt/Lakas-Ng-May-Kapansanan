@@ -22,7 +22,6 @@ export const LoginSignup = () => {
   }, [pageTitle]);
 
   // MUST BE ON TOP //
- 
 
   const navigate = useNavigate();
   
@@ -63,7 +62,7 @@ export const LoginSignup = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username,
-        password: password,
+        password,
         firstname,
         middlename,
         lastname,
