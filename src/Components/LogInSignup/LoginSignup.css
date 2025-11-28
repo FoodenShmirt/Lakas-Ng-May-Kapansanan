@@ -25,8 +25,8 @@ h2{
 }
 
 .bg_logo img{
-    width: 150px;
-    height: auto;
+    width: 15vw;
+    height: 15vh;
 }
 
 input[type="text"], input[type="password"], input[type="email"] {

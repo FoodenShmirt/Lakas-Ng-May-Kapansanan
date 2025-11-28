@@ -58,6 +58,7 @@ function DashBoard() {
 
   return (
     // Main container for the dashboard
+    // map components
 <>
   <div className="map-title">
     <h1>Map User Location</h1>
@@ -79,7 +80,16 @@ function DashBoard() {
         </>
       )}
     </MapContainer>
+      <div className="map-info-box">
+      <p><strong>User:</strong> Princes Gomez</p>
+      <p><strong>Device ID:</strong> T02</p>
+      <p><strong>Status:</strong> Active</p>
+      <p><strong>Battery:</strong> 98%</p>
+      <button className="alert-btn">ALERT</button>
+    </div>
   </div>
+
+
 </>
   );
 }
