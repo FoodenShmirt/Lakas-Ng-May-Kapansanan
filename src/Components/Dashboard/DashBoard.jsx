@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
+import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import "./DashBoard.css";
+import "./DashBoard.css"; // Import the CSS file
 
-// Fix default marker
+// Fix Leaflet default icon paths
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -15,67 +15,72 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+// Component to fly map to user's location
+function FlyToLocation({ position }) {
+  const map = useMap();
+  useEffect(() => {
+    if (position) map.flyTo(position, 17);
+  }, [position, map]);
+  return null;
+}
+
 function DashBoard() {
   const [position, setPosition] = useState(null);
-  const mapRef = useRef(null);
 
-  // ⬇️ Run only once
   useEffect(() => {
     if (!("geolocation" in navigator)) {
-      alert("Your browser does not support geolocation.");
+      alert("Geolocation is not supported by your browser");
       return;
     }
 
-    const onSuccess = (pos) => {
-      const coords = [pos.coords.latitude, pos.coords.longitude];
-      setPosition(coords);
-
-      // ⬇️ Force map recenter when location updates
-      if (mapRef.current) {
-        mapRef.current.setView(coords, 17, { animate: true });
+    // Getting location
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        setPosition([pos.coords.latitude, pos.coords.longitude]); 
+      },
+      (err) => {
+        console.error("Geolocation error:", err);
+        alert(
+          err.code === 1
+            ? "Please allow location access"
+            : "Unable to get your location"
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 5000,
       }
-    };
-
-    const onError = (err) => {
-      console.warn("Geo Error:", err);
-    };
-
-    // Get location once
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
-
-    // Then watch location continuously
-    const watchId = navigator.geolocation.watchPosition(onSuccess, onError, {
-      enableHighAccuracy: true,
-    });
+    );
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
   return (
-    <>
-      <div className="map-title"><h1>Map User Location</h1></div>
+    // Main container for the dashboard
+<>
+  <div className="map-title">
+    <h1>Map User Location</h1>
+  </div>
 
-      <div className="dashboard-container">
-        <MapContainer
-          center={[14.7699169, 121.0784688]}
-          zoom={15}
-          className="map-container"
-          whenCreated={(map) => {
-            mapRef.current = map;
-            setTimeout(() => map.invalidateSize(), 200);
-          }}
-        >
-          <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+  <div className="dashboard-container">
+    <MapContainer
+      center={[14.7699169, 121.0784688]}
+      zoom={16}
+      className="map-container"
+    >
+      <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-          {position && (
-            <>
-              <Marker position={position} />
-              <Circle center={position} radius={400} />
-            </>
-          )}
-        </MapContainer>
-      </div>
-    </>
+      {position && (
+        <>
+          <Marker position={position} />
+          <Circle center={position} radius={450} />
+          <FlyToLocation position={position} />
+        </>
+      )}
+    </MapContainer>
+  </div>
+</>
   );
 }
 
