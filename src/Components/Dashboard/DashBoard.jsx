@@ -96,7 +96,7 @@ function DashBoard() {
     } else {
       // iOS fallback: Play alert sound
       const audio = new Audio("/alert.mp3");
-      audio.volume = 1.0;
+      audio.volume = 100.0;
 
       audio
         .play()
