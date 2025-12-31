@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import "./DashBoard.css"; // Import the CSS file
+import "./DashBoard.css";
 
 // Fix Leaflet default icon paths
 delete L.Icon.Default.prototype._getIconUrl;
@@ -15,7 +15,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-// Component to fly map to user's location
+// Fly map to user's location
 function FlyToLocation({ position }) {
   const map = useMap();
   useEffect(() => {
@@ -24,8 +24,11 @@ function FlyToLocation({ position }) {
   return null;
 }
 
+
+
 function DashBoard() {
   const [position, setPosition] = useState(null);
+  const mapRef = useRef();
 
   useEffect(() => {
     if (!("geolocation" in navigator)) {
@@ -35,9 +38,7 @@ function DashBoard() {
 
     // Getting location
     const watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        setPosition([pos.coords.latitude, pos.coords.longitude]); 
-      },
+      (pos) => setPosition([pos.coords.latitude, pos.coords.longitude]),
       (err) => {
         console.error("Geolocation error:", err);
         alert(
@@ -46,51 +47,77 @@ function DashBoard() {
             : "Unable to get your location"
         );
       },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 5000,
-      }
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
+  // Resize map when container changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (mapRef.current) mapRef.current.invalidateSize();
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    // Main container for the dashboard
-    // map components
-<>
-  <div className="map-title">
-    <h1>Map User Location</h1>
-  </div>
+    <>
+      <div className="map-title">
+        <h1>Map User Location</h1>
+      </div>
 
-  <div className="dashboard-container">
-    <MapContainer
-      center={[14.7699169, 121.0784688]}
-      zoom={16}
-      className="map-container"
-    >
-      <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <div className="dashboard-container">
+        <MapContainer
+          center={[14.7699169, 121.0784688]}
+          zoom={16}
+          className="map-container"
+          whenCreated={(mapInstance) => (mapRef.current = mapInstance)}
+        >
+          <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          {position && (
+            <>
+              <Marker position={position} />
+              <Circle center={position} radius={450} />
+              <FlyToLocation position={position} />
+            </>
+          )}
+        </MapContainer>
 
-      {position && (
-        <>
-          <Marker position={position} />
-          <Circle center={position} radius={450} />
-          <FlyToLocation position={position} />
-        </>
-      )}
-    </MapContainer>
-      <div className="map-info-box">
-      <p><strong>User:</strong> Princes Gomez</p>
-      <p><strong>Device ID:</strong> T02</p>
-      <p><strong>Status:</strong> Active</p>
-      <p><strong>Battery:</strong> 98%</p>
-      <button className="alert-btn">ALERT</button>
-    </div>
-  </div>
+        <div className="map-info-box">
+          <p><strong>User:</strong> Princes Gomez</p>
+          <p><strong>Device ID:</strong> T02</p>
+          <p><strong>Status:</strong> Active</p>
+          <p><strong>Battery:</strong> 99%</p>
+          <button
+  className="alert-btn"
+  onClick={() => {
+    // Check vibration support first (Android)
+    if (navigator.vibrate) {
+      navigator.vibrate([500, 200, 500]);
+    } else {
+      // iOS fallback: Play alert sound
+      const audio = new Audio("/alert-sound.mp3");
+      audio.volume = 1.0;
 
-
-</>
+      audio
+        .play()
+        .then(() => {
+          console.log("Audio played on iOS");
+        })
+        .catch((err) => {
+          console.error("Audio failed to play:", err);
+          alert("⚠️ Sound could not be played on this device.");
+        });
+    }
+  }}
+>
+  ALERT
+</button>
+        </div>
+      </div>
+    </>
   );
 }
 

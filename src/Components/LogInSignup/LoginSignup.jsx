@@ -25,14 +25,64 @@ export const LoginSignup = () => {
 
   const navigate = useNavigate();
   
-  const handleLogIn = (e) => {
+ const handleLogIn = async (e) => {
   e.preventDefault();
 
-  if (username === "admin" && password === "admin") {
-    localStorage.setItem("loggedIn", "true");
-    navigate("/dashboard");
-  } else {
-    alert("Invalid username or password. Try again.");
+  try {
+    const res = await fetch("http://localhost:8080/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem("loggedIn", "true");
+      navigate("/dashboard");
+    } else {
+      alert(data.message);
+    }
+
+  } catch (err) {
+    console.error("Login failed:", err);
+    alert("Server error. Please try again.");
+    }
+  };
+
+ const handleSignUp = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("http://localhost:8080/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username,
+        password,
+        firstname,
+        middlename,
+        lastname,
+        email,
+        contact,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Account created successfully! You can now log in.");
+      setAction("LOG IN");
+      setPageTitle("Log In");
+    } else {
+      alert(data.message);
+    }
+  } catch (err) {
+    console.error("Signup failed:", err);
+    alert("Server error. Please try again.");
   }
 };
 
@@ -165,7 +215,7 @@ export const LoginSignup = () => {
           {/* SIGN UP BUTTON ON SIGN UP PAGE*/}
           {action === "SIGN UP" && (
             <div className="submitcontainer_sgn">
-              <button className="submit_sgn" onClick={handleLogIn}>
+              <button className="submit_sgn" onClick={handleSignUp}>
                 Sign Up
               </button>
               <button
