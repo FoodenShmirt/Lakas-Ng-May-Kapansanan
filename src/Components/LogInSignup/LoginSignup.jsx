@@ -17,8 +17,6 @@ export const LoginSignup = () => {
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
 
-
-
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
@@ -27,18 +25,17 @@ export const LoginSignup = () => {
 
 const navigate = useNavigate();
   
- // Replace 'https://your-backend-api.onrender.com' with your actual live server URL
-const API_URL = "https://your-backend-api.onrender.com"; 
+const API_URL = "https://lakas-ng-may-kapansanan.onrender.com"; 
 
+//login function
 const handleLogIn = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch(`${API_URL}/login`, { // Updated URL
+    const res = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-    // ... rest of your code
 
     const data = await res.json();
 
@@ -55,12 +52,13 @@ const handleLogIn = async (e) => {
     }
   };
 
+//sign up
  const handleSignUp = async (e) => {
   e.preventDefault();
 
   try {
     const API_URL = "https://lakas-ng-may-kapansanan.onrender.com"; 
-    const res = await fetch(`${API_URL}/login`, {
+    const res = await fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

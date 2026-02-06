@@ -8,7 +8,7 @@ const { Pool } = require("pg");
 
 const app = express();
 app.use(cors({
-    origin: ["https://lnmkicc.netlify.app/"],
+    origin: ["https://lnmkicc.netlify.app"],
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -17,6 +17,7 @@ app.use(express.json());
 // 1. Connection Config - Fixed keys for 'user' and 'password'
 const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 const pool = new Pool({
+
     host: PGHOST,
     database: PGDATABASE,
     user: PGUSER,         
