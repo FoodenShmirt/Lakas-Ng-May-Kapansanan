@@ -7,12 +7,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // SIGN UP
 app.post("/signup", async (req, res) => {
     const { username, password, firstname, middlename, lastname, email, contact } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+   const hashedPassword = await bcrypt.hash(password, 10); //hash
     const sql = `INSERT INTO users 
         (username, password, firstname, middlename, lastname, email, contact) 
         VALUES (?, ?, ?, ?, ?, ?, ?)`;

@@ -17,6 +17,8 @@ export const LoginSignup = () => {
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
 
+
+
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);
@@ -85,7 +87,6 @@ export const LoginSignup = () => {
     alert("Server error. Please try again.");
   }
 };
-
 
   return (
     <>

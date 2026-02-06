@@ -6,6 +6,7 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import "./DashBoard.css";
+import { useNavigate } from "react-router-dom";
 
 // Fix Leaflet default icon paths
 delete L.Icon.Default.prototype._getIconUrl;
@@ -29,6 +30,7 @@ function FlyToLocation({ position }) {
 function DashBoard() {
   const [position, setPosition] = useState(null);
   const mapRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!("geolocation" in navigator)) {
@@ -62,8 +64,16 @@ function DashBoard() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // logout
+      const handleLogOut = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        navigate("/login");
+      };
+
   return (
     <>
+ 
       <div className="map-title">
         <h1>Map User Location</h1>
       </div>
@@ -90,6 +100,7 @@ function DashBoard() {
           <p><strong>Device ID:</strong> T02</p>
           <p><strong>Status:</strong> Active</p>
           <p><strong>Battery:</strong> 99%</p>
+          
           <button
   className="alert-btn"
   onClick={() => {
@@ -111,13 +122,16 @@ function DashBoard() {
           alert("⚠️ Sound could not be played on this device.");
         });
     }
-  }}
->
+  }}>
   ALERT
-</button>
-        </div>
-      </div>
-    </>
+  </button>
+    <button className="alert-btn"
+            onClick={handleLogOut}>
+              Log Out
+            </button>
+            </div>
+          </div>
+        </>
   );
 }
 
