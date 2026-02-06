@@ -8,7 +8,7 @@ const { Pool } = require("pg");
 
 const app = express();
 app.use(cors({
-    origin: ["https://lnmkicc.netlify.app/", "http://localhost:3000"],
+    origin: ["https://lnmkicc.netlify.app/"],
     methods: ["GET", "POST"],
     credentials: true
 }));
