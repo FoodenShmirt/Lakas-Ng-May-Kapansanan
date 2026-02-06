@@ -5,7 +5,11 @@ const bcrypt = require("bcrypt");
 const { Pool } = require("pg");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: ["https://lnmkicc.netlify.app/", "http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 app.use(express.json());
 
 // 1. Connection Config - Fixed keys for 'user' and 'password'
