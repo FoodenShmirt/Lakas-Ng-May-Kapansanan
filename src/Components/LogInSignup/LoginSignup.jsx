@@ -59,7 +59,8 @@ const handleLogIn = async (e) => {
   e.preventDefault();
 
   try {
-    const res = await fetch("http://localhost:8080/signup", {
+    const API_URL = "https://lakas-ng-may-kapansanan.onrender.com"; 
+    const res = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
