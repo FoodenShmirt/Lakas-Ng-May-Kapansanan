@@ -25,20 +25,20 @@ export const LoginSignup = () => {
 
   // MUST BE ON TOP //
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
   
- const handleLogIn = async (e) => {
-  e.preventDefault();
+ // Replace 'https://your-backend-api.onrender.com' with your actual live server URL
+const API_URL = "https://your-backend-api.onrender.com"; 
 
+const handleLogIn = async (e) => {
+  e.preventDefault();
   try {
-    const res = await fetch("http://localhost:8080/login", {
+    const res = await fetch(`${API_URL}/login`, { // Updated URL
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: username,
-        password: password
-      }),
+      body: JSON.stringify({ username, password }),
     });
+    // ... rest of your code
 
     const data = await res.json();
 

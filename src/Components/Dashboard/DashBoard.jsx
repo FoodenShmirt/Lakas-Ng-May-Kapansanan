@@ -25,8 +25,6 @@ function FlyToLocation({ position }) {
   return null;
 }
 
-
-
 function DashBoard() {
   const [position, setPosition] = useState(null);
   const mapRef = useRef();
@@ -73,7 +71,6 @@ function DashBoard() {
 
   return (
     <>
- 
       <div className="map-title">
         <h1>Map User Location</h1>
       </div>
@@ -96,7 +93,7 @@ function DashBoard() {
         </MapContainer>
 
         <div className="map-info-box">
-          <p><strong>User:</strong> Princes Gomez</p>
+          <p><strong>User:</strong> Angelo Maluya</p>
           <p><strong>Device ID:</strong> T02</p>
           <p><strong>Status:</strong> Active</p>
           <p><strong>Battery:</strong> 99%</p>
